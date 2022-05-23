@@ -158,6 +158,10 @@ describe("POST butterfly", () => {
   });
 });
 
+describe("PUT /butterflies/:id/rating", () => {
+  it.todo("successfully returns the modified Butterfly resource");
+});
+
 describe("GET user", () => {
   it("success", async () => {
     const response = await request(app).get("/users/abcd1234");

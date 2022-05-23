@@ -8,6 +8,8 @@ const shortid = require("shortid");
 const constants = require("./constants");
 const { validateButterfly, validateUser } = require("./validators");
 const ButterflyRepository = require("./domain/ButterflyRepository");
+const UserRepository = require("./domain/UserRepository");
+const NotFoundError = require("./domain/NotFoundError");
 
 async function createApp(dbPath) {
   const app = express();
@@ -17,6 +19,8 @@ async function createApp(dbPath) {
   await db.read();
 
   const butterflyRepository = new ButterflyRepository(db);
+  const userRepository = new UserRepository(db);
+
   app.get("/", (req, res) => {
     res.json({ message: "Server is running!" });
   });
@@ -76,12 +80,15 @@ async function createApp(dbPath) {
    * GET
    */
   app.get("/users/:id", async (req, res) => {
-    const user = await db.get("users").find({ id: req.params.id }).value();
-
-    if (!user) {
-      return res.status(404).json({ error: "Not found" });
+    let user;
+    try {
+      user = await userRepository.findById(req.params.id);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(404).json({ error: "Not found" });
+      }
+      throw error;
     }
-
     res.json(user);
   });
 
@@ -101,7 +108,7 @@ async function createApp(dbPath) {
       ...req.body,
     };
 
-    await db.get("users").push(newUser).write();
+    await userRepository.create(newUser);
 
     res.json(newUser);
   });

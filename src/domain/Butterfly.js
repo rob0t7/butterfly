@@ -1,5 +1,6 @@
 "use strict";
 
+/** Class representing a Butterfly. */
 class Butterfly {
   #id;
   #commonName;
@@ -7,6 +8,14 @@ class Butterfly {
   #article;
   #ratings;
 
+  /**
+   * Create a butterfly.
+   * @param {string} obj.id - Id of the Butterfly
+   * @param {string} obj.commonName - Common Butterfly name.
+   * @param {string} obj.species - Butterfly species.
+   * @param {string} obj.article - Article about the Butterfly
+   * @param {rating} obj.ratings - Key/value pairs of ratings.
+   */
   constructor({ id, commonName, species, article, ratings = {} }) {
     this.#id = id;
     this.#commonName = commonName;
@@ -35,6 +44,11 @@ class Butterfly {
     return this.#ratings;
   }
 
+  /**
+   * Submit a User rating of this particular butterfly.
+   * @param {string} userId - The id of the user who is submitting the rating.
+   * @param {number} rating - A number between 0 and 5 inclusive.
+   */
   rateButterfly(userId, rating) {
     if (!Number.isInteger(rating)) {
       throw new RangeError("The rating must be an integer between 0 and 5.");
@@ -45,6 +59,20 @@ class Butterfly {
     this.#ratings[userId] = rating;
   }
 
+  /**
+   *
+   * @typedef {Object} ButterflyJSON
+   * @property {string} id - Butterfly ID
+   * @property {string} commonName - Common butterfly name.
+   * @property {string} species - Butterfly species
+   * @property {string} article - Butterfly article URL
+   * @property {object} ratings - Butterfly ratings
+   */
+
+  /**
+   * Returns the JSON representation.
+   * @returns {ButterflyJSON}
+   */
   toJSON() {
     const { id, commonName, species, article, ratings } = this;
     return {
