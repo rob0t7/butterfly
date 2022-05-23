@@ -36,7 +36,12 @@ class Butterfly {
   }
 
   rateButterfly(userId, rating) {
-    // TODO: Added assertions to ensure invariant is valid
+    if (!Number.isInteger(rating)) {
+      throw new RangeError("The rating must be an integer between 0 and 5.");
+    }
+    if (rating < 0 || rating > 5) {
+      throw new RangeError("The rating must be an integer between 0 and 5.");
+    }
     this.#ratings[userId] = rating;
   }
 

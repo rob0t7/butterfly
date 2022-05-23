@@ -26,5 +26,29 @@ describe("Butterfly", () => {
       subject.rateButterfly("abcd1234", 3);
       expect(subject.ratings).toEqual({ abcd1234: 3 });
     });
+    it("throws a RangeException if the value is less than 0", () => {
+      const subject = new Butterfly(butterflyAttrs);
+      expect(() => {
+        subject.rateButterfly("abcd1234", -1);
+      }).toThrow(
+        new RangeError("The rating must be an integer between 0 and 5.")
+      );
+    });
+    it("throws a RangeException if the value is greater than 5", () => {
+      const subject = new Butterfly(butterflyAttrs);
+      expect(() => {
+        subject.rateButterfly("abcd1234", 5.1);
+      }).toThrow(
+        new RangeError("The rating must be an integer between 0 and 5.")
+      );
+    });
+    it("throws a RangeException if the value is not a number", () => {
+      const subject = new Butterfly(butterflyAttrs);
+      expect(() => {
+        subject.rateButterfly("abcd1234", "A");
+      }).toThrow(
+        new RangeError("The rating must be an integer between 0 and 5.")
+      );
+    });
   });
 });
