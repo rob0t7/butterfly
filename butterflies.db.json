@@ -4,37 +4,47 @@
       "id": "GI9_EuH8s1",
       "commonName": "Zebra Swallowtail",
       "species": "Protographium marcellus",
-      "article": "https://en.wikipedia.org/wiki/Protographium_marcellus"
+      "article": "https://en.wikipedia.org/wiki/Protographium_marcellus",
+      "ratings": {
+        "abcd1234": 3
+      }
     },
     {
       "id": "xRKSdjkBt4",
       "commonName": "Plum Judy",
       "species": "Abisara echerius",
-      "article": "https://en.wikipedia.org/wiki/Abisara_echerius"
+      "article": "https://en.wikipedia.org/wiki/Abisara_echerius",
+      "ratings": {
+        "abcd1234": 5
+      }
     },
     {
       "id": "0MUBKMu07U",
       "commonName": "Red Pierrot",
       "species": "Talicada nyseus",
-      "article": "https://en.wikipedia.org/wiki/Talicada_nyseus"
+      "article": "https://en.wikipedia.org/wiki/Talicada_nyseus",
+      "ratings": {}
     },
     {
       "id": "NLktii5zvK",
       "commonName": "Texan Crescentspot",
       "species": "Anthanassa texana",
-      "article": "https://en.wikipedia.org/wiki/Anthanassa_texana"
+      "article": "https://en.wikipedia.org/wiki/Anthanassa_texana",
+      "ratings": {}
     },
     {
       "id": "SMyaT24g-N",
       "commonName": "Guava Skipper",
       "species": "Phocides polybius",
-      "article": "https://en.wikipedia.org/wiki/Phocides_polybius"
+      "article": "https://en.wikipedia.org/wiki/Phocides_polybius",
+      "ratings": {}
     },
     {
       "id": "DCenP4kQNQ",
       "commonName": "Mexican Bluewing",
       "species": "Myscelia ethusa",
-      "article": "https://en.wikipedia.org/wiki/Myscelia_ethusa"
+      "article": "https://en.wikipedia.org/wiki/Myscelia_ethusa",
+      "ratings": {}
     }
   ],
   "users": [
@@ -49,6 +59,10 @@
     {
       "id": "aqekk3t4kw",
       "username": "metamorphosize_me"
+    },
+    {
+      "id": "abcd1234",
+      "username": "bob"
     }
   ]
 }

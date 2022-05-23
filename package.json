@@ -38,9 +38,10 @@
     "supertest": "^6.2.3"
   },
   "engines": {
-    "node": ">=14.16.0"
+    "node": ">=16.15.0"
   },
   "eslintConfig": {
+    "parserOptions": {"ecmaVersion": 13},
     "extends": ["@mapbox/eslint-config-mapbox", "prettier"],
     "overrides": [
       {

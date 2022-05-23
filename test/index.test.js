@@ -10,6 +10,21 @@ const createApp = require("../src/index");
 
 let app;
 
+const butterflyJSON = {
+  id: "wxyz9876",
+  commonName: "test-butterfly",
+  species: "Testium butterflius",
+  article: "https://example.com/testium_butterflius",
+  ratings: { abcd1234: 3 },
+};
+
+const butterfly2 = {
+  id: "butterfly2",
+  commonName: "test-butterfly2",
+  species: "Butterfly2",
+  article: "https://example.com/butterfly2",
+  ratings: { abcd1234: 5 },
+};
 beforeAll(async () => {
   // Create a test database
   const testDbPath = path.join(__dirname, "test.db.json");
@@ -18,14 +33,7 @@ beforeAll(async () => {
   // Fill the test database with data
   await db
     .setState({
-      butterflies: [
-        {
-          id: "wxyz9876",
-          commonName: "test-butterfly",
-          species: "Testium butterflius",
-          article: "https://example.com/testium_butterflius",
-        },
-      ],
+      butterflies: [butterflyJSON, butterfly2],
       users: [
         {
           id: "abcd1234",
@@ -49,6 +57,25 @@ describe("GET root", () => {
   });
 });
 
+describe("GET /butterflies", () => {
+  it("retrieves all the butterflies", async () => {
+    const response = await request(app).get("/butterflies").send();
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([butterflyJSON, butterfly2]);
+  });
+});
+
+describe("GET /butterflies?userID=<userID>", () => {
+  it("retrieves all the user's butterflies sorted by rank", async () => {
+    const userID = "abcd1234";
+    const response = await request(app)
+      .get(`/butterflies?userId=${userID}`)
+      .send();
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([butterfly2, butterflyJSON]);
+  });
+});
+
 describe("GET butterfly", () => {
   it("success", async () => {
     const response = await request(app).get("/butterflies/wxyz9876");
@@ -58,6 +85,7 @@ describe("GET butterfly", () => {
       commonName: "test-butterfly",
       species: "Testium butterflius",
       article: "https://example.com/testium_butterflius",
+      ratings: { abcd1234: 3 },
     });
   });
 
@@ -96,6 +124,7 @@ describe("POST butterfly", () => {
       commonName: "Boop",
       species: "Boopi beepi",
       article: "https://example.com/boopi_beepi",
+      ratings: {},
     });
   });
 

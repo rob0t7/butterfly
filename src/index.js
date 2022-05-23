@@ -7,6 +7,7 @@ const shortid = require("shortid");
 
 const constants = require("./constants");
 const { validateButterfly, validateUser } = require("./validators");
+const ButterflyRepository = require("./domain/ButterflyRepository");
 
 async function createApp(dbPath) {
   const app = express();
@@ -15,6 +16,7 @@ async function createApp(dbPath) {
   const db = await lowdb(new FileAsync(dbPath));
   await db.read();
 
+  const butterflyRepository = new ButterflyRepository(db);
   app.get("/", (req, res) => {
     res.json({ message: "Server is running!" });
   });
@@ -22,15 +24,23 @@ async function createApp(dbPath) {
   /* ----- BUTTERFLIES ----- */
 
   /**
+   * Get all butterflies
+   * GET
+   */
+  app.get("/butterflies", async (req, res) => {
+    const userId = req.query["userId"];
+    const butterflies = userId
+      ? await butterflyRepository.findAllByUserId(userId)
+      : await butterflyRepository.findAll();
+    return res.json(butterflies);
+  });
+
+  /**
    * Get an existing butterfly
    * GET
    */
   app.get("/butterflies/:id", async (req, res) => {
-    const butterfly = await db
-      .get("butterflies")
-      .find({ id: req.params.id })
-      .value();
-
+    const butterfly = await butterflyRepository.findById(req.params.id);
     if (!butterfly) {
       return res.status(404).json({ error: "Not found" });
     }
@@ -54,7 +64,7 @@ async function createApp(dbPath) {
       ...req.body,
     };
 
-    await db.get("butterflies").push(newButterfly).write();
+    await butterflyRepository.create(newButterfly);
 
     res.json(newButterfly);
   });
