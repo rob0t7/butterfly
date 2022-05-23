@@ -1,6 +1,6 @@
 "use strict";
 
-const Butterfly = require("../src/domain/Butterfly");
+const Butterfly = require("../../src/domain/Butterfly");
 const shortid = require("shortid");
 
 const butterflyAttrs = {

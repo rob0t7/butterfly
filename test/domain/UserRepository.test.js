@@ -3,8 +3,8 @@
 const lowdb = require("lowdb");
 const Memory = require("lowdb/adapters/Memory");
 const shortid = require("shortid");
-const User = require("../src/domain/User");
-const UserRepository = require("../src/domain/UserRepository");
+const User = require("../../src/domain/User");
+const UserRepository = require("../../src/domain/UserRepository");
 
 const db = lowdb(new Memory());
 const user1 = new User(shortid.generate(), "bob");

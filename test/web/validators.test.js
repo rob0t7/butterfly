@@ -1,6 +1,6 @@
 "use strict";
 
-const { validateButterfly, validateUser } = require("../src/validators");
+const { validateButterfly, validateUser } = require("../../src/web/validators");
 
 describe("validateButterfly", () => {
   const validButterfly = {

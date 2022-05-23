@@ -3,9 +3,9 @@
 const low = require("lowdb");
 const Memory = require("lowdb/adapters/Memory");
 const shortid = require("shortid");
-const Butterfly = require("../src/domain/Butterfly");
-const ButterflyRepository = require("../src/domain/ButterflyRepository");
-const NotFoundError = require("../src/domain/NotFoundError");
+const Butterfly = require("../../src/domain/Butterfly");
+const ButterflyRepository = require("../../src/domain/ButterflyRepository");
+const NotFoundError = require("../../src/domain/NotFoundError");
 
 const db = low(new Memory());
 const butterfly1 = new Butterfly({

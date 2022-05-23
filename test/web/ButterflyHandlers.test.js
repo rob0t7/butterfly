@@ -6,7 +6,7 @@ const FileAsync = require("lowdb/adapters/FileAsync");
 const request = require("supertest");
 const shortid = require("shortid");
 
-const createApp = require("../src/index");
+const createApp = require("../../src/index");
 
 let app;
 
@@ -195,72 +195,19 @@ describe("PUT /butterflies/:id/rating", () => {
     expect(response.body).toEqual({ error: "Invalid request body" });
   });
 
-  it("returns a bad request if the user does not exist", async () => {
+  it("returns a bad request without a userId", async () => {
     const ratingURL = `/butterflies/${butterflyJSON.id}/rating`;
     const reqBody = { rating: 3 };
     const response = await request(app).put(ratingURL).send(reqBody);
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ error: "Invalid request body" });
   });
-});
 
-describe("GET user", () => {
-  it("success", async () => {
-    const response = await request(app).get("/users/abcd1234");
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      id: "abcd1234",
-      username: "test-user",
-    });
-  });
-
-  it("error - not found", async () => {
-    const response = await request(app).get("/users/bad-id");
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({
-      error: "Not found",
-    });
-  });
-});
-
-describe("POST user", () => {
-  it("success", async () => {
-    shortid.generate = jest.fn().mockReturnValue("new-user-id");
-
-    const postResponse = await request(app).post("/users").send({
-      username: "Buster",
-    });
-
-    expect(postResponse.status).toBe(200);
-    expect(postResponse.body).toEqual({
-      id: "new-user-id",
-      username: "Buster",
-    });
-
-    const getResponse = await request(app).get("/users/new-user-id");
-
-    expect(getResponse.status).toBe(200);
-    expect(getResponse.body).toEqual({
-      id: "new-user-id",
-      username: "Buster",
-    });
-  });
-
-  it("error - empty body", async () => {
-    const response = await request(app).post("/users").send();
-
+  it("returns a bad request if the user does not exist", async () => {
+    const ratingURL = `/butterflies/${butterflyJSON.id}/rating`;
+    const reqBody = { userId: "does-not-exist", rating: 3 };
+    const response = await request(app).put(ratingURL).send(reqBody);
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Invalid request body",
-    });
-  });
-
-  it("error - missing all attributes", async () => {
-    const response = await request(app).post("/users").send({});
-
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Invalid request body",
-    });
+    expect(response.body).toEqual({ error: "Invalid request body" });
   });
 });

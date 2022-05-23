@@ -1,0 +1,28 @@
+{
+  "butterflies": [
+    {
+      "id": "wxyz9876",
+      "commonName": "test-butterfly",
+      "species": "Testium butterflius",
+      "article": "https://example.com/testium_butterflius",
+      "ratings": {
+        "abcd1234": 3
+      }
+    },
+    {
+      "id": "butterfly2",
+      "commonName": "test-butterfly2",
+      "species": "Butterfly2",
+      "article": "https://example.com/butterfly2",
+      "ratings": {
+        "abcd1234": 5
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": "abcd1234",
+      "username": "test-user"
+    }
+  ]
+}
