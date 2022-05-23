@@ -21,11 +21,11 @@ If you have any questions or concerns, please do not hesitate to contact us!
 
 ### What we're looking for
 
-* Your code should be extensible and reusable
-* Your code should be well tested
-* Your code should be tidy and adhere to conventions
-* Your changes should be well-scoped and explained in the write-up
-* Your write-up should be thoughtful and coherent
+- Your code should be extensible and reusable
+- Your code should be well tested
+- Your code should be tidy and adhere to conventions
+- Your changes should be well-scoped and explained in the write-up
+- Your write-up should be thoughtful and coherent
 
 ❗️ Note: please do not write your name anywhere in your solution, since this prevents us from evaluating it anonymously.
 
@@ -33,12 +33,12 @@ If you have any questions or concerns, please do not hesitate to contact us!
 
 You will be scored on the following aspects of your work:
 
-* Endpoint implementation
-* Endpoint design
-* Appropriate testing of new code
-* Tidiness and adherence to conventions
-* Appropriate refactoring
-* Communication in the write-up
+- Endpoint implementation
+- Endpoint design
+- Appropriate testing of new code
+- Tidiness and adherence to conventions
+- Appropriate refactoring
+- Communication in the write-up
 
 0 = poor 1 = adequate 2 = exceptional
 
@@ -48,8 +48,8 @@ The maximum possible score is 12.
 
 ### Requirements
 
-* Node v14.x
-* npm v6
+- Node v14.x
+- npm v6
 
 ### Setup
 

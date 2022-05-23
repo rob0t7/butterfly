@@ -1,5 +1,5 @@
-'use strict';
+"use strict";
 
 module.exports = {
-  DB_PATH: './butterflies.db.json'
+  DB_PATH: "./butterflies.db.json",
 };

@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-const express = require('express');
-const lowdb = require('lowdb');
-const FileAsync = require('lowdb/adapters/FileAsync');
-const shortid = require('shortid');
+const express = require("express");
+const lowdb = require("lowdb");
+const FileAsync = require("lowdb/adapters/FileAsync");
+const shortid = require("shortid");
 
-const constants = require('./constants');
-const { validateButterfly, validateUser } = require('./validators');
+const constants = require("./constants");
+const { validateButterfly, validateUser } = require("./validators");
 
 async function createApp(dbPath) {
   const app = express();
@@ -15,8 +15,8 @@ async function createApp(dbPath) {
   const db = await lowdb(new FileAsync(dbPath));
   await db.read();
 
-  app.get('/', (req, res) => {
-    res.json({ message: 'Server is running!' });
+  app.get("/", (req, res) => {
+    res.json({ message: "Server is running!" });
   });
 
   /* ----- BUTTERFLIES ----- */
@@ -25,13 +25,14 @@ async function createApp(dbPath) {
    * Get an existing butterfly
    * GET
    */
-  app.get('/butterflies/:id', async (req, res) => {
-    const butterfly = await db.get('butterflies')
+  app.get("/butterflies/:id", async (req, res) => {
+    const butterfly = await db
+      .get("butterflies")
       .find({ id: req.params.id })
       .value();
 
     if (!butterfly) {
-      return res.status(404).json({ error: 'Not found' });
+      return res.status(404).json({ error: "Not found" });
     }
 
     res.json(butterfly);
@@ -41,25 +42,22 @@ async function createApp(dbPath) {
    * Create a new butterfly
    * POST
    */
-  app.post('/butterflies', async (req, res) => {
+  app.post("/butterflies", async (req, res) => {
     try {
       validateButterfly(req.body);
     } catch (error) {
-      return res.status(400).json({ error: 'Invalid request body' });
+      return res.status(400).json({ error: "Invalid request body" });
     }
 
     const newButterfly = {
       id: shortid.generate(),
-      ...req.body
+      ...req.body,
     };
 
-    await db.get('butterflies')
-      .push(newButterfly)
-      .write();
+    await db.get("butterflies").push(newButterfly).write();
 
     res.json(newButterfly);
   });
-
 
   /* ----- USERS ----- */
 
@@ -67,13 +65,11 @@ async function createApp(dbPath) {
    * Get an existing user
    * GET
    */
-  app.get('/users/:id', async (req, res) => {
-    const user = await db.get('users')
-      .find({ id: req.params.id })
-      .value();
+  app.get("/users/:id", async (req, res) => {
+    const user = await db.get("users").find({ id: req.params.id }).value();
 
     if (!user) {
-      return res.status(404).json({ error: 'Not found' });
+      return res.status(404).json({ error: "Not found" });
     }
 
     res.json(user);
@@ -83,21 +79,19 @@ async function createApp(dbPath) {
    * Create a new user
    * POST
    */
-  app.post('/users', async (req, res) => {
+  app.post("/users", async (req, res) => {
     try {
       validateUser(req.body);
     } catch (error) {
-      return res.status(400).json({ error: 'Invalid request body' });
+      return res.status(400).json({ error: "Invalid request body" });
     }
 
     const newUser = {
       id: shortid.generate(),
-      ...req.body
+      ...req.body,
     };
 
-    await db.get('users')
-      .push(newUser)
-      .write();
+    await db.get("users").push(newUser).write();
 
     res.json(newUser);
   });
