@@ -83,4 +83,14 @@ describe("ButterflyRepository", () => {
       ]);
     });
   });
+
+  describe(".save(butterfly)", () => {
+    it("saves the butterfly to the DB", async () => {
+      const butterfly = await subject.findById(butterfly1.id);
+      butterfly.update("A new butterfly", butterfly.species, butterfly.article);
+      await subject.save(butterfly);
+      const actual = await subject.findById(butterfly.id);
+      expect(actual.toJSON()).toEqual(butterfly.toJSON());
+    });
+  });
 });

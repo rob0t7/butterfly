@@ -45,6 +45,19 @@ class Butterfly {
   }
 
   /**
+   * Updates the main attributes about the butterfly.
+   *
+   * @param {string} commonName - Common Butterfly name
+   * @param {string} species - Butterfly species
+   * @param {string} article - Article URL
+   */
+  update(commonName, species, article) {
+    this.#commonName = commonName;
+    this.#species = species;
+    this.#article = article;
+  }
+
+  /**
    * Submit a User rating of this particular butterfly.
    * @param {string} userId - The id of the user who is submitting the rating.
    * @param {number} rating - A number between 0 and 5 inclusive.

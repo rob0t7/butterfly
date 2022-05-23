@@ -16,7 +16,15 @@ const validateUser = v.assert(
   })
 );
 
+const validateRatingReq = v.assert(
+  v.strictShape({
+    userId: v.required(v.string),
+    rating: v.required(v.range([0, 5])),
+  })
+);
+
 module.exports = {
   validateButterfly,
   validateUser,
+  validateRatingReq,
 };

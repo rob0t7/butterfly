@@ -6,7 +6,11 @@ const FileAsync = require("lowdb/adapters/FileAsync");
 const shortid = require("shortid");
 
 const constants = require("./constants");
-const { validateButterfly, validateUser } = require("./validators");
+const {
+  validateButterfly,
+  validateUser,
+  validateRatingReq,
+} = require("./validators");
 const ButterflyRepository = require("./domain/ButterflyRepository");
 const UserRepository = require("./domain/UserRepository");
 const NotFoundError = require("./domain/NotFoundError");
@@ -55,6 +59,32 @@ async function createApp(dbPath) {
     }
   });
 
+  app.put("/butterflies/:id/rating", async (req, res) => {
+    try {
+      validateRatingReq(req.body);
+    } catch {
+      return res.status(400).json({ error: "Invalid request body" });
+    }
+    let user;
+    try {
+      user = await userRepository.findById(req.body.userId);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(400).json({ error: "Invalid request body" });
+      }
+    }
+    try {
+      const butterfly = await butterflyRepository.findById(req.params.id);
+      butterfly.rateButterfly(user.id, req.body.rating);
+      await butterflyRepository.save(butterfly);
+      return res.json(butterfly);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(404).json({ error: "Not found" });
+      }
+      throw error;
+    }
+  });
   /**
    * Create a new butterfly
    * POST

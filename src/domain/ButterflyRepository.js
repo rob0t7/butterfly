@@ -24,6 +24,11 @@ class ButterflyRepository {
       .value();
   }
 
+  /**
+   * Retrieves a butteryfly by id.
+   * @param {string} id - Butterfly id
+   * @returns {Butterfly} butterfly - A Butterfly Object
+   */
   async findById(id) {
     const attrs = await this.db.get("butterflies").find({ id }).value();
     if (!attrs) {
@@ -33,6 +38,15 @@ class ButterflyRepository {
   }
 
   async create(butterfly) {
+    await this.db.get("butterflies").push(butterfly).write();
+  }
+
+  /**
+   * Saves a butterfly to the repository
+   * @param {Butterfly} butterfly
+   */
+  async save(butterfly) {
+    await this.db.get("butterflies").remove({ id: butterfly.id }).write();
     await this.db.get("butterflies").push(butterfly).write();
   }
 

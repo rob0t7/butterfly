@@ -159,7 +159,49 @@ describe("POST butterfly", () => {
 });
 
 describe("PUT /butterflies/:id/rating", () => {
-  it.todo("successfully returns the modified Butterfly resource");
+  it("successfully returns the modified Butterfly resource", async () => {
+    const userId = "abcd1234";
+    const ratingURL = `/butterflies/${butterflyJSON.id}/rating`;
+    const reqBody = { userId, rating: 1 };
+    let response = await request(app).put(ratingURL).send(reqBody);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      ...butterflyJSON,
+      ratings: { [userId]: 1 },
+    });
+
+    response = await request(app).get(`/butterflies/${butterflyJSON.id}`);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      ...butterflyJSON,
+      ratings: { [userId]: 1 },
+    });
+  });
+
+  it("returns a 404 response if the Butterfly does not exist", async () => {
+    const ratingURL = "/butterflies/does-not-exist/rating";
+    const response = await request(app)
+      .put(ratingURL)
+      .send({ userId: "abcd1234", rating: 3 });
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: "Not found" });
+  });
+
+  it("returns a bad request if the input is not valid", async () => {
+    const ratingURL = `/butterflies/${butterflyJSON.id}/rating`;
+    const reqBody = { userId: "abcd1234", rating: -1 };
+    const response = await request(app).put(ratingURL).send(reqBody);
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "Invalid request body" });
+  });
+
+  it("returns a bad request if the user does not exist", async () => {
+    const ratingURL = `/butterflies/${butterflyJSON.id}/rating`;
+    const reqBody = { rating: 3 };
+    const response = await request(app).put(ratingURL).send(reqBody);
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "Invalid request body" });
+  });
 });
 
 describe("GET user", () => {
