@@ -5,6 +5,7 @@ const Memory = require("lowdb/adapters/Memory");
 const shortid = require("shortid");
 const Butterfly = require("../src/domain/Butterfly");
 const ButterflyRepository = require("../src/domain/ButterflyRepository");
+const NotFoundError = require("../src/domain/NotFoundError");
 
 const db = low(new Memory());
 const butterfly1 = new Butterfly({
@@ -48,7 +49,9 @@ describe("ButterflyRepository", () => {
 
   describe(".findById", () => {
     it("returns null if the butterfly does not exist", async () => {
-      expect(await subject.findById("some-id-that-does-not-exist")).toBeNull();
+      await expect(async () => {
+        await subject.findById("some-id-that-does-not-exist");
+      }).rejects.toThrow(new NotFoundError());
     });
     it("returns the butterfly with the corresponding id", async () => {
       expect(await subject.findById(butterfly1.id)).toEqual(butterfly1);

@@ -1,5 +1,6 @@
 "use strict";
 
+const NotFoundError = require("./NotFoundError");
 const Butterfly = require("./Butterfly");
 
 class ButterflyRepository {
@@ -25,7 +26,10 @@ class ButterflyRepository {
 
   async findById(id) {
     const attrs = await this.db.get("butterflies").find({ id }).value();
-    return attrs ? new Butterfly(attrs) : null;
+    if (!attrs) {
+      throw new NotFoundError();
+    }
+    return new Butterfly(attrs);
   }
 
   async create(butterfly) {

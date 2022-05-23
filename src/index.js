@@ -44,12 +44,15 @@ async function createApp(dbPath) {
    * GET
    */
   app.get("/butterflies/:id", async (req, res) => {
-    const butterfly = await butterflyRepository.findById(req.params.id);
-    if (!butterfly) {
-      return res.status(404).json({ error: "Not found" });
+    try {
+      const butterfly = await butterflyRepository.findById(req.params.id);
+      return res.json(butterfly);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(404).json({ error: "Not found" });
+      }
+      throw error;
     }
-
-    res.json(butterfly);
   });
 
   /**
