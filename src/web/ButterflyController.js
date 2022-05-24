@@ -1,17 +1,20 @@
 "use strict";
 const NotFoundError = require("../domain/NotFoundError");
-const shortid = require("shortid");
 const { validateButterfly, validateRatingReq } = require("./validators");
 
 module.exports = (app, butterflyRepository, userRepository) => {
+  const usecases = require("../domain/usecases")(
+    butterflyRepository,
+    userRepository
+  );
   /**
    * Get Butterfly collection resource
    */
   app.get("/butterflies", async (req, res) => {
     const userId = req.query["userId"];
     const butterflies = userId
-      ? await butterflyRepository.findAllByUserId(userId)
-      : await butterflyRepository.findAll();
+      ? await usecases.fetchAllForUserId(userId)
+      : await usecases.fetchAll();
     return res.json(butterflies);
   });
 
@@ -21,7 +24,7 @@ module.exports = (app, butterflyRepository, userRepository) => {
    */
   app.get("/butterflies/:id", async (req, res) => {
     try {
-      const butterfly = await butterflyRepository.findById(req.params.id);
+      const butterfly = await usecases.findButterflyById(req.params.id);
       return res.json(butterfly);
     } catch (error) {
       /* istanbul ignore else */
@@ -39,32 +42,17 @@ module.exports = (app, butterflyRepository, userRepository) => {
   app.put("/butterflies/:id/rating", async (req, res) => {
     try {
       validateRatingReq(req.body);
-    } catch {
-      return res.status(400).json({ error: "Invalid request body" });
-    }
-    let user;
-    try {
-      user = await userRepository.findById(req.body.userId);
+      const butterfly = await usecases.rateButterfly(
+        req.params.id,
+        req.body.userId,
+        req.body.rating
+      );
+      res.status(200).json(butterfly);
     } catch (error) {
-      /* istanbul ignore else */
-      if (error instanceof NotFoundError) {
-        return res.status(400).json({ error: "Invalid request body" });
-      }
-      /* istanbul ignore next */
-      throw error;
-    }
-    try {
-      const butterfly = await butterflyRepository.findById(req.params.id);
-      butterfly.rateButterfly(user.id, req.body.rating);
-      await butterflyRepository.save(butterfly);
-      return res.json(butterfly);
-    } catch (error) {
-      /* istanbul ignore else */
       if (error instanceof NotFoundError) {
         return res.status(404).json({ error: "Not found" });
       }
-      /* istanbul ignore next */
-      throw error;
+      return res.status(400).json({ error: "Invalid request body" });
     }
   });
 
@@ -78,14 +66,7 @@ module.exports = (app, butterflyRepository, userRepository) => {
     } catch (error) {
       return res.status(400).json({ error: "Invalid request body" });
     }
-
-    const newButterfly = {
-      id: shortid.generate(),
-      ...req.body,
-    };
-
-    await butterflyRepository.create(newButterfly);
-
-    res.json(newButterfly);
+    const newButterfly = await usecases.registerNewButterfly(req.body);
+    res.status(201).json(newButterfly);
   });
 };

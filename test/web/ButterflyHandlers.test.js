@@ -108,12 +108,13 @@ describe("POST butterfly", () => {
       article: "https://example.com/boopi_beepi",
     });
 
-    expect(postResponse.status).toBe(200);
+    expect(postResponse.status).toBe(201);
     expect(postResponse.body).toEqual({
       id: "new-butterfly-id",
       commonName: "Boop",
       species: "Boopi beepi",
       article: "https://example.com/boopi_beepi",
+      ratings: {},
     });
 
     const getResponse = await request(app).get("/butterflies/new-butterfly-id");
@@ -207,7 +208,7 @@ describe("PUT /butterflies/:id/rating", () => {
     const ratingURL = `/butterflies/${butterflyJSON.id}/rating`;
     const reqBody = { userId: "does-not-exist", rating: 3 };
     const response = await request(app).put(ratingURL).send(reqBody);
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({ error: "Invalid request body" });
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: "Not found" });
   });
 });
